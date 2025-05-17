@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1942 RP - Loading Screen</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#FDCD22", secondary: "#333333" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+
+      // JavaScript function to cycle through tips
+      document.addEventListener("DOMContentLoaded", function () {
+        const tipText = document.getElementById("tipText");
+        const tips = [
+          "Random Deathmatch (RDM) is not allowed — always have a valid RP reason before engaging.",
+          "Vehicle Deathmatch (VDM) is strictly prohibited. Use vehicles responsibly and realistically.",
+          "Don't mug or kidnap in spawn or near NPC areas. These are safe zones.",
+          "Breaking character (FailRP) ruins the experience — stay in character at all times.",
+          "Basing rules matter: no kill boxes, unfair mazes, or unreachable buttons.",
+          "Do not switch jobs to avoid arrest or death. This is considered job abuse.",
+          "Police must follow the law too — don't abuse your role or randomly weapon-check people.",
+          "Hitmen must receive proper contracts. Random killing as a hitman is still RDM.",
+          "Don't metagame — use only in-character knowledge when making decisions.",
+          "Bank raids and store robberies must be planned with roleplay, not chaos.",
+          "Mic spam, soundboards, and trolling are not welcome — respect the community.",
+          "Printers and illegal items must be hidden and defended — not placed in spawn.",
+          "You must own the doors to the building you're basing in — no fake bases.",
+          "Staff are here to help — report issues or bugs respectfully."
+        ];
+
+        let currentTip = 0;
+        setInterval(() => {
+          tipText.textContent = tips[currentTip];
+          currentTip = (currentTip + 1) % tips.length;
+        }, 5000); // Change tip every 5 seconds
+
+        // Loading animation
+        const loadingBar = document.getElementById('loadingBar');
+        const loadingPercent = document.getElementById('loadingPercent');
+        let progress = 0;
+        
+        const loadingInterval = setInterval(() => {
+          progress += Math.random() * 5;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(loadingInterval);
+          }
+          loadingBar.style.width = `${progress}%`;
+          loadingPercent.textContent = `${Math.floor(progress)}%`;
+        }, 100);
+      });
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap');
+      
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #121212;
+        overflow: hidden;
+        color: white;
+      }
+      .title-text {
+        font-family: 'Bebas Neue', sans-serif;
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.6);
+        letter-spacing: 0.1em;
+      }
+      .vignette {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-shadow: inset 0 0 150px 60px rgba(0, 0, 0, 0.8);
+        pointer-events: none;
+      }
+      .overlay-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.2;
+      }
+      .scanline {
+        background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.05) 50%, transparent);
+        background-size: 100% 4px;
+        animation: scanline 6s linear infinite;
+      }
+      @keyframes scanline {
+        0% { background-position: 0 0; }
+        100% { background-position: 0 1200px; }
+      }
+      /* Footer Styling */
+      .footer-box {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+        transition: all 0.3s ease;
+      }
+      .footer-box:hover {
+        background-color: rgba(0, 0, 0, 0.85);
+        transform: translateY(-2px);
+      }
+      .footer-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      .footer-heading {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: #FDCD22;
+        text-transform: uppercase;
+        font-family: 'Bebas Neue', sans-serif;
+        letter-spacing: 1px;
+      }
+      .footer-item {
+        color: #bbb;
+        font-size: 0.9rem;
+      }
+      .footer-item span {
+        color: #FDCD22;
+        font-weight: 500;
+      }
+      
+      /* Loading Bar */
+      .loading-container {
+        width: 100%;
+        height: 8px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        margin-top: 20px;
+        overflow: hidden;
+      }
+      .loading-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #FDCD22 0%, #F8A51B 100%);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        position: relative;
+      }
+      .loading-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, 
+          rgba(255, 255, 255, 0.1) 0%, 
+          rgba(255, 255, 255, 0.3) 50%, 
+          rgba(255, 255, 255, 0.1) 100%);
+        animation: shimmer 2s infinite;
+      }
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      
+      /* Fade-in animation */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .fade-in {
+        animation: fadeIn 0.8s ease forwards;
+      }
+      
+      /* Pulse animation */
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+      
+      /* Glow effect */
+      .glow {
+        text-shadow: 0 0 10px rgba(253, 205, 34, 0.7);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col justify-between">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-cover bg-center"
+      style="background-image: url('https://readdy.ai/api/search-image?query=Dark%20vintage%20military%20background%20from%201942%20World%20War%20II%20era%20with%20subtle%20textures%20and%20patterns%20showing%20worn%20military%20equipment%2C%20maps%2C%20and%20period%20artifacts%20arranged%20in%20a%20moody%20composition%20with%20dramatic%20lighting%20and%20shadows%2C%20desaturated%20colors%20with%20yellow%20highlights%2C%20perfect%20for%20a%20game%20loading%20screen%20background&width=1920&height=1080');"
+    ></div>
+    <div class="overlay-pattern absolute inset-0"></div>
+    <div class="scanline absolute inset-0"></div>
+    <div class="vignette"></div>
+
+    <div class="relative z-10 flex flex-col items-center justify-between h-screen p-8">
+      <!-- Header Section -->
+      <div class="w-full flex flex-col items-center mt-8 fade-in" style="animation-delay: 0.2s">
+        <div class="mb-10 flex items-center gap-6">
+          <img
+            src="https://static.readdy.ai/image/fee3daa688a9a8557443c9eba552a37f/8218e3afb285a20cce41c7a7ff121d45.png"
+            alt="Global Networks Logo"
+            class="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-primary shadow-lg pulse"
+          />
+          <div class="flex flex-col">
+            <h2 class="text-primary text-4xl sm:text-5xl font-bold tracking-wide title-text glow">
+              Global Networks
+            </h2>
+            <p class="text-gray-300 text-sm sm:text-base tracking-wider mt-1 uppercase">
+              Military Command Unit
+            </p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <h1 class="title-text text-primary text-7xl sm:text-8xl font-bold tracking-wider glow">
+            1942 RP
+          </h1>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="w-full max-w-3xl flex flex-col items-center fade-in" style="animation-delay: 0.4s">
+        <!-- Tips Section -->
+        <div
+          class="bg-black bg-opacity-40 p-6 rounded-lg border border-primary border-opacity-30 w-full backdrop-blur-sm"
+        >
+          <h3 class="text-primary text-lg mb-3 flex items-center">
+            <i class="ri-information-line text-primary mr-2"></i>
+            SERVER TIP
+          </h3>
+          <p id="tipText" class="text-gray-300 text-base">
+            Loading server tips...
+          </p>
+          
+          <!-- Loading Bar -->
+          <div class="mt-6">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm text-gray-400">Loading game resources...</span>
+              <span id="loadingPercent" class="text-sm text-primary font-medium">0%</span>
+            </div>
+            <div class="loading-container">
+              <div id="loadingBar" class="loading-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Information -->
+      <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-400 mb-4 fade-in" style="animation-delay: 0.6s">
+        <div class="footer-box">
+          <p class="footer-item">Map: <span>rp_berlin_1942</span></p>
+          <p class="footer-item">Gamemode: <span>1942Rp</span></p>
+          <p class="footer-item mt-2"><i class="ri-user-3-line mr-1"></i> Players: <span>24/64</span></p>
+        </div>
+
+        <div class="footer-box">
+          <p class="footer-heading">GMOD 1942 ROLEPLAY</p>
+          <p class="footer-item">v2.3.7 | 2025-05-12</p>
+          <p class="footer-item mt-2"><i class="ri-server-line mr-1"></i> Status: <span class="text-green-400">Online</span></p>
+        </div>
+
+        <div class="footer-box">
+          <p class="footer-item">Developed by <span>Global Networks</span></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
