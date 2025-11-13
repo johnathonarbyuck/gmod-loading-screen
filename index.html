@@ -1,3 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCPNET Terminal Interface</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    body {
+      margin: 0;
+      background-color: #0b0b0b;
+      color: #00ff99;
+      font-family: 'Share Tech Mono', monospace;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: #050505;
+      border-bottom: 1px solid #111;
+      padding: 12px 24px;
+      font-size: 13px;
+      color: #bbb;
+      letter-spacing: 2px;
+    }
+
+    .header span {
+      color: #fff;
+      margin-right: 20px;
+      font-weight: bold;
+    }
+
+    .header .inactive {
+      color: #444;
+      margin-right: 18px;
+    }
+
+    .terminal {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: calc(100vh - 45px);
+      background: radial-gradient(circle at center, #101010 0%, #000000 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 40px 40px, 40px 40px; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 50px 80px;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title {
+      color: #ffffff;
+      font-size: 20px;
+      letter-spacing: 1px;
+      animation: flicker 2s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      92% { opacity: 0.9; }
+      93% { opacity: 0.6; }
+      94% { opacity: 0.8; }
+      95% { opacity: 0.5; }
+      96% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .scp-logo {
+      opacity: 0.02;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      width: 250px;
+      animation: slowRotate 60s linear infinite, fadeLogo 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes slowRotate {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    @keyframes fadeLogo {
+      0% { opacity: 0.01; }
+      50% { opacity: 0.05; }
+      100% { opacity: 0.01; }
+    }
+
+    .terminal-window {
+      border-left: 2px solid #00ff99;
+      padding-left: 20px;
+      margin-top: 40px;
+      animation: fadeIn 1.5s ease forwards;
+      animation-delay: 0.5s;
+      opacity: 0;
+    }
+
+    .terminal-window p {
+      margin: 6px 0;
+      color: #00ff99;
+    }
+
+    .prompt {
+      color: #00ff99;
+    }
+
+    .time {
+      color: #999;
+    }
+
+    .divider {
+      border-top: 1px dashed #222;
+      margin: 10px 0;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 18px;
+      background-color: #ffffff;
+      margin-left: 4px;
+      animation: blinkWhite 1s infinite;
+    }
+
+    @keyframes blinkWhite {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .prompt-cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff99;
+      animation: blinkGreen 1s infinite;
+    }
+
+    @keyframes blinkGreen {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* Additional SCP-like subtle glitch effect */
+    .glitch {
+      position: relative;
+      color: #00ff99;
+      animation: glitchAnim 3s infinite;
+    }
+    @keyframes glitchAnim {
+      0% { text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99; }
+      33% { text-shadow: 2px 0 3px #00ff99, -2px 0 3px #00ff99; transform: translate(1px, ­1px); }
+      66% { text-shadow: -2px 0 3px #00ff99, 2px 0 3px #00ff99; transform: translate(-1px, 1px); }
+      100% { text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99; transform: translate(0, 0); }
+    }
+
+    /* Boot-sequence line by line */
+    .boot-lines {
+      opacity: 0;
+      animation: showLines 1.2s forwards;
+      animation-delay: 0.8s;
+    }
+    .boot-lines p {
+      animation: lineFade 0.4s forwards;
+    }
+    .boot-lines p:nth-child(1) { animation-delay: 0.8s; }
+    .boot-lines p:nth-child(2) { animation-delay: 1.2s; }
+    .boot-lines p:nth-child(3) { animation-delay: 1.6s; }
+    .boot-lines p:nth-child(4) { animation-delay: 2.0s; }
+    @keyframes showLines {
+      to { opacity: 1; }
+    }
+    @keyframes lineFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div class="header">
+    <span class="glitch">TERMINAL</span>
+    <span class="inactive">DATABASE</span>
+    <span class="inactive">LABORATORY</span>
+  </div>
+
+  <!-- TERMINAL AREA -->
+  <div class="terminal">
+    <div class="grid"></div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/SCP_Foundation_Logo_White.png" alt="SCP Foundation Logo" class="scp-logo" />
+
+    <div class="content">
+      <div class="title">WELCOME<span class="cursor"></span></div>
+      <div class="subtitle">GUEST</div>
+
+      <div class="terminal-window">
+        <div class="boot-lines">
+          <p>------------------------------------------------------------</p>
+          <p>SCPNET TERMINAL v1.4.4</p>
+          <p>------------------------------------------------------------</p>
+          <p>SECURE, CONTAIN, PROTECT // SCP FOUNDATION DATABASE NETWORK</p>
+          <p class="time">Access Time: <span id="accessTime">Loading...</span></p>
+          <div class="divider"></div>
+          <p class="prompt">admin@scpnet:$ <span class="prompt-cursor"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to format date as DD/MM/YYYY, HH:MM:SS
+    function formatDateTime(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds}`;
+    }
+
+    function updateAccessTime() {
+      const now = new Date();
+      document.getElementById("accessTime").textContent = formatDateTime(now);
+    }
+
+    // Initial load + update every second for realism
+    updateAccessTime();
+    setInterval(updateAccessTime, 1000);
+  </script>
+</body>
+</html>
+
+
 
 
 
