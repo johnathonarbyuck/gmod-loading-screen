@@ -3,268 +3,204 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SCPNET Terminal Interface</title>
+  <title>Krump Networks 1939RP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
-    body {
-      margin: 0;
-      background-color: #0b0b0b;
-      color: #00ff99;
-      font-family: 'Share Tech Mono', monospace;
-      overflow: hidden;
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Philosopher:wght@400;700&display=swap');
+    body { 
+      background: linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 50%, #0f0f1e 100%);
+      color: #e0d5c7; 
+      font-family: 'Philosopher', sans-serif; 
+      overflow-x: hidden; 
+      position: relative; 
     }
-
-    .header {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      background-color: #050505;
-      border-bottom: 1px solid #111;
-      padding: 12px 24px;
-      font-size: 13px;
-      color: #bbb;
-      letter-spacing: 2px;
+    .title-text { 
+      font-family: 'Cinzel', serif; 
+      letter-spacing: 0.15em; 
+      text-transform: uppercase; 
     }
-
-    .header span {
-      color: #fff;
-      margin-right: 20px;
-      font-weight: bold;
+    .mystical-glow-gold { 
+      color: #d4af37; 
+      text-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37, 0 0 30px #d4af37, 0 0 40px #b8941f; 
+      animation: goldPulse 3s infinite alternate;
     }
-
-    .header .inactive {
-      color: #444;
-      margin-right: 18px;
+    @keyframes goldPulse { 
+      0% { text-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37, 0 0 30px #d4af37; } 
+      100% { text-shadow: 0 0 20px #d4af37, 0 0 40px #d4af37, 0 0 60px #b8941f, 0 0 80px #b8941f; } 
     }
-
-    .terminal {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      height: calc(100vh - 45px);
-      background: radial-gradient(circle at center, #101010 0%, #000000 100%);
+    .mystical-glow-purple { 
+      color: #9d4edd; 
+      text-shadow: 0 0 10px #9d4edd, 0 0 20px #9d4edd, 0 0 30px #7b2cbf; 
+    }
+    .black-sun { 
+      width: 200px; 
+      height: 200px; 
+      background: radial-gradient(circle, #1a1a2e 0%, #000000 70%);
+      border: 3px solid #d4af37;
+      border-radius: 50%;
+      box-shadow: 0 0 30px #d4af37, 0 0 60px #b8941f, inset 0 0 30px #000;
+      animation: blackSunRotate 20s linear infinite;
+      position: relative;
+    }
+    .black-sun::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="%23d4af37" opacity="0.3"/><path d="M50 10 L50 30 M50 70 L50 90 M10 50 L30 50 M70 50 L90 50 M20 20 L30 30 M70 30 L80 20 M20 80 L30 70 M70 70 L80 80" stroke="%23d4af37" stroke-width="2" opacity="0.6"/></svg>') center/contain no-repeat;
+    }
+    @keyframes blackSunRotate { 
+      from { transform: rotate(0deg); } 
+      to { transform: rotate(360deg); } 
+    }
+    .mystical-card { 
+      background: linear-gradient(135deg, rgba(26,10,46,0.8) 0%, rgba(15,15,30,0.9) 100%);
+      padding: 2rem; 
+      border-radius: 16px; 
+      border: 2px solid #d4af37; 
+      box-shadow: 0 0 20px rgba(212,175,55,0.3), inset 0 0 20px rgba(212,175,55,0.1); 
+      transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
     }
-
-    .grid {
+    .mystical-card::before {
+      content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%);
+      animation: cardGlow 4s ease-in-out infinite;
+    }
+    @keyframes cardGlow {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(10%, 10%); }
+    }
+    .mystical-card:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 0 40px rgba(212,175,55,0.6), inset 0 0 30px rgba(157,78,221,0.2);
+      border-color: #9d4edd;
+    }
+    .section-title {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
       bottom: 0;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: 0;
-      animation: gridMove 20s linear infinite;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, #d4af37 50%, transparent 100%);
     }
-
-    @keyframes gridMove {
-      0% { background-position: 0 0, 0 0; }
-      100% { background-position: 40px 40px, 40px 40px; }
+    .fade-in { opacity: 0; animation: fadeIn 1s forwards; }
+    .fade-delay-1 { animation-delay: 0.2s; }
+    .fade-delay-2 { animation-delay: 0.4s; }
+    .fade-delay-3 { animation-delay: 0.6s; }
+    .fade-delay-4 { animation-delay: 0.8s; }
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(30px); } 
+      to { opacity: 1; transform: translateY(0); } 
     }
-
-    .content {
-      position: relative;
-      z-index: 1;
-      padding: 50px 80px;
-      animation: fadeIn 2s ease forwards;
+    .vril-particle { 
+      position: absolute; 
+      width: 4px; 
+      height: 4px; 
+      background: #d4af37; 
+      border-radius: 50%; 
+      box-shadow: 0 0 10px #d4af37;
+      animation: vrilFloat 15s linear infinite; 
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes vrilFloat { 
+      0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; } 
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) translateX(150px) scale(1); opacity: 0; } 
     }
-
-    .title {
-      color: #ffffff;
-      font-size: 20px;
-      letter-spacing: 1px;
-      animation: flicker 2s infinite alternate;
+    .rune-text {
+      font-size: 1.5rem;
+      color: #9d4edd;
+      text-shadow: 0 0 10px #9d4edd;
     }
-
-    @keyframes flicker {
-      0% { opacity: 1; }
-      92% { opacity: 0.9; }
-      93% { opacity: 0.6; }
-      94% { opacity: 0.8; }
-      95% { opacity: 0.5; }
-      96% { opacity: 0.7; }
-      100% { opacity: 1; }
-    }
-
-    .subtitle {
-      color: #888;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-
-    .scp-logo {
-      opacity: 0.02;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(0deg);
-      width: 250px;
-      animation: slowRotate 60s linear infinite, fadeLogo 8s ease-in-out infinite alternate;
-    }
-
-    @keyframes slowRotate {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    @keyframes fadeLogo {
-      0% { opacity: 0.01; }
-      50% { opacity: 0.05; }
-      100% { opacity: 0.01; }
-    }
-
-    .terminal-window {
-      border-left: 2px solid #00ff99;
-      padding-left: 20px;
-      margin-top: 40px;
-      animation: fadeIn 1.5s ease forwards;
-      animation-delay: 0.5s;
-      opacity: 0;
-    }
-
-    .terminal-window p {
-      margin: 6px 0;
-      color: #00ff99;
-    }
-
-    .prompt {
-      color: #00ff99;
-    }
-
-    .time {
-      color: #999;
-    }
-
-    .divider {
-      border-top: 1px dashed #222;
-      margin: 10px 0;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 18px;
-      background-color: #ffffff;
-      margin-left: 4px;
-      animation: blinkWhite 1s infinite;
-    }
-
-    @keyframes blinkWhite {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-
-    .prompt-cursor {
-      display: inline-block;
-      width: 10px;
-      background-color: #00ff99;
-      animation: blinkGreen 1s infinite;
-    }
-
-    @keyframes blinkGreen {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-
-    /* Additional SCP-like subtle glitch effect */
-    .glitch {
-      position: relative;
-      color: #00ff99;
-      animation: glitchAnim 3s infinite;
-    }
-    @keyframes glitchAnim {
-      0% { text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99; }
-      33% { text-shadow: 2px 0 3px #00ff99, -2px 0 3px #00ff99; transform: translate(1px, ­1px); }
-      66% { text-shadow: -2px 0 3px #00ff99, 2px 0 3px #00ff99; transform: translate(-1px, 1px); }
-      100% { text-shadow: 0 0 2px #00ff99, 0 0 5px #00ff99; transform: translate(0, 0); }
-    }
-
-    /* Boot-sequence line by line */
-    .boot-lines {
-      opacity: 0;
-      animation: showLines 1.2s forwards;
-      animation-delay: 0.8s;
-    }
-    .boot-lines p {
-      animation: lineFade 0.4s forwards;
-    }
-    .boot-lines p:nth-child(1) { animation-delay: 0.8s; }
-    .boot-lines p:nth-child(2) { animation-delay: 1.2s; }
-    .boot-lines p:nth-child(3) { animation-delay: 1.6s; }
-    .boot-lines p:nth-child(4) { animation-delay: 2.0s; }
-    @keyframes showLines {
-      to { opacity: 1; }
-    }
-    @keyframes lineFade {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
   </style>
 </head>
-<body>
-  <!-- HEADER -->
-  <div class="header">
-    <span class="glitch">TERMINAL</span>
-    <span class="inactive">DATABASE</span>
-    <span class="inactive">LABORATORY</span>
+<body class="flex flex-col items-center justify-start min-h-screen p-6 relative overflow-hidden">
+
+  <!-- Vril Energy Particles -->
+  <script>
+    for (let i = 0; i < 40; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('vril-particle');
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.animationDuration = 10 + Math.random() * 15 + 's';
+      particle.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(particle);
+    }
+  </script>
+
+  <!-- Header with Black Sun Logo -->
+  <div class="flex flex-col items-center mt-12 fade-in fade-delay-1 relative z-10">
+    <div class="relative mb-6">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/Lord_Ashtar.png" alt="Networks Logo" class="w-48 h-48 rounded-full border-4 border-solid" style="border-color: #d4af37; box-shadow: 0 0 30px #d4af37, 0 0 60px #b8941f; animation: blackSunRotate 20s linear infinite;" />
+    </div>
+    <h1 class="title-text text-5xl sm:text-7xl mystical-glow-gold text-center">Krump Networks</h1>
+    <p class="text-lg tracking-widest uppercase mt-3 mystical-glow-purple">1939 Roleplay</p>
+    <div class="rune-text mt-4">⊰ ᛟ ⊱</div>
   </div>
 
-  <!-- TERMINAL AREA -->
-  <div class="terminal">
-    <div class="grid"></div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/SCP_Foundation_Logo_White.png" alt="SCP Foundation Logo" class="scp-logo" />
+  <!-- Introduction -->
+  <div class="mt-16 max-w-4xl text-center fade-in fade-delay-2 relative z-10">
+    <p class="text-xl leading-relaxed text-gray-300">
+      Beyond the veil of surface reality lies <span class="mystical-glow-gold font-semibold">Agartha</span>, 
+      the hidden realm of ancient wisdom. Descend through the sacred gates and unlock the mysteries 
+      of the <span class="mystical-glow-purple font-semibold">Hollow Earth</span>.
+    </p>
+  </div>
 
-    <div class="content">
-      <div class="title">WELCOME<span class="cursor"></span></div>
-      <div class="subtitle">GUEST</div>
+  <!-- Learning Objectives Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl fade-in fade-delay-3 relative z-10">
+    
+    <!-- Card 1 -->
+    <div class="mystical-card">
+      <p class="text-sm leading-relaxed text-gray-300">Map Developer: <span class="font-semibold mystical-glow-gold">Marcus and Nutscript</span></p>
+    </div>
 
-      <div class="terminal-window">
-        <div class="boot-lines">
-          <p>------------------------------------------------------------</p>
-          <p>SCPNET TERMINAL v1.4.4</p>
-          <p>------------------------------------------------------------</p>
-          <p>SECURE, CONTAIN, PROTECT // SCP FOUNDATION DATABASE NETWORK</p>
-          <p class="time">Access Time: <span id="accessTime">Loading...</span></p>
-          <div class="divider"></div>
-          <p class="prompt">admin@scpnet:$ <span class="prompt-cursor"></span></p>
-        </div>
-      </div>
+    <!-- Card 2 -->
+    <div class="mystical-card">
+      <p class="text-sm leading-relaxed text-gray-300">Developer: <span class="font-semibold mystical-glow-gold">Ibby</span></p>
+      <p class="text-sm leading-relaxed text-gray-300 mt-2">Gamemode: <span class="font-semibold mystical-glow-gold">1939RP</span></p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="mystical-card">
+      <p class="text-sm leading-relaxed text-gray-300">Developed by <span class="font-semibold mystical-glow-gold">Krump Networks</span></p>
+    </div>
+
+  </div>
+
+  <!-- Sacred Quote -->
+  <div class="mt-20 max-w-3xl text-center fade-in fade-delay-4 relative z-10">
+    <div class="mystical-card">
+      <p class="text-xl italic mystical-glow-purple leading-relaxed">
+        "Don't break Fear RP. Stay in character and respect situations. 
+        No random deathmatching."
+      </p>
+      <p class="text-sm mt-4 text-gray-400">— Server Rules</p>
     </div>
   </div>
 
-  <script>
-    // Function to format date as DD/MM/YYYY, HH:MM:SS
-    function formatDateTime(date) {
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const year = date.getFullYear();
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-      return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds}`;
-    }
+  <!-- Footer -->
+  <footer class="mt-20 mb-10 text-center text-gray-600 text-sm fade-in fade-delay-4 relative z-10">
+    <div class="rune-text mb-4">⊰ ᚦ ⊱</div>
+    <p class="mt-2">© 2025 Krump Networks - The Roleplay Awaits</p>
+  </footer>
 
-    function updateAccessTime() {
-      const now = new Date();
-      document.getElementById("accessTime").textContent = formatDateTime(now);
-    }
-
-    // Initial load + update every second for realism
-    updateAccessTime();
-    setInterval(updateAccessTime, 1000);
-  </script>
 </body>
 </html>
+
 
 
 
